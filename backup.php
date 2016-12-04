@@ -1,60 +1,109 @@
-<!-- Selected table backup and restore -->
+
+<!-- Complete Database Backup and Restore -->
 
 <?php
-   $dbhost = 'mysql1.cs.clemson.edu';
-   $dbuser = 'Moneka';
-   $dbpass = 'moneka123';
-   
-   $conn = mysql_connect($dbhost, $dbuser, $dbpass);
-   
-   if(! $conn ) {
-      die('Could not connect: ' . mysql_error());
-   }
 
-   $table_name = "person";
-   $backup_file  = "/tmp/employee.sql";
-   $sql = "SELECT * INTO OUTFILE '$backup_file' FROM $table_name";
-   
-   mysql_select_db('test_db');
-   $retval = mysql_query( $sql, $conn );
-   
-   if(! $retval ) {
-      die('Could not take data backup: ' . mysql_error());
-   }
+$params = array(
+    'db_host'=> 'mysql1.cs.clemson.edu',  //mysql host
+    'db_uname' => 'Moneka',  //user
+    'db_password' => 'moneka123', //pass
+    'db_to_backup' => 'SchoolDB', //database name
+    'db_backup_path' => '/home/mbommas/public_html', //where to backup
+    'db_exclude_tables' => array('contact') //tables to exclude
+);
 
-    $sqlr = "LOAD DATA INFILE '$backup_file' INTO TABLE $table_name";
-   
-    mysql_select_db('test_db');
-    $retvalr = mysql_query( $sqlr, $conn );
-   
-    if(! $retvalr ) {
-      die('Could not load data : ' . mysql_error());
-   }
-   echo "Loaded  data successfully\n";
-   
-   
-   echo "Backedup  data successfully\n";
-   
-   mysql_close($conn);
+
+$mtables = array(); $contents = "-- Database: `".$params['db_to_backup']."` --\n";
+    
+    $mysqli = new mysqli($params['db_host'], $params['db_uname'], $params['db_password'], $params['db_to_backup']);
+    if ($mysqli->connect_error) {
+        die('Error : ('. $mysqli->connect_errno .') '. $mysqli->connect_error);
+    }
+    
+    $results = $mysqli->query("SHOW TABLES");
+    
+    while($row = $results->fetch_array()){
+        if (!in_array($row[0], $params['db_exclude_tables'])){
+            $mtables[] = $row[0];
+        }
+    }
+
+    foreach($mtables as $table){
+        $contents .= "-- Table `".$table."` --\n";
+        
+        $results = $mysqli->query("SHOW CREATE TABLE ".$table);
+        while($row = $results->fetch_array()){
+            $contents .= $row[1].";\n\n";
+        }
+
+        $results = $mysqli->query("SELECT * FROM ".$table);
+        $row_count = $results->num_rows;
+        $fields = $results->fetch_fields();
+        $fields_count = count($fields);
+        
+        $insert_head = "INSERT INTO `".$table."` (";
+        for($i=0; $i < $fields_count; $i++){
+            $insert_head  .= "`".$fields[$i]->name."`";
+                if($i < $fields_count-1){
+                        $insert_head  .= ', ';
+                    }
+        }
+        $insert_head .=  ")";
+        $insert_head .= " VALUES\n";        
+                
+        if($row_count>0){
+            $r = 0;
+            while($row = $results->fetch_array()){
+                if(($r % 400)  == 0){
+                    $contents .= $insert_head;
+                }
+                $contents .= "(";
+                for($i=0; $i < $fields_count; $i++){
+                    $row_content =  str_replace("\n","\\n",$mysqli->real_escape_string($row[$i]));
+                    
+                    switch($fields[$i]->type){
+                        case 8: case 3:
+                            $contents .=  $row_content;
+                            break;
+                        default:
+                            $contents .= "'". $row_content ."'";
+                    }
+                    if($i < $fields_count-1){
+                            $contents  .= ', ';
+                        }
+                }
+                if(($r+1) == $row_count || ($r % 400) == 399){
+                    $contents .= ");\n\n";
+                }else{
+                    $contents .= "),\n";
+                }
+                $r++;
+            }
+        }
+    }
+    
+    if (!is_dir ( $params['db_backup_path'] )) {
+            mkdir ( $params['db_backup_path'], 0755, true );
+     }
+    
+    $backup_file_name = "sql-backup-".date( "d-m-Y--h-i-s").".sql";
+         
+    $fp = fopen($backup_file_name ,'w+');
+    if (($result = fwrite($fp, $contents))) {
+        echo "Backup file '--$backup_file_name' ($result) is created in the SchoolDB folder!"; 
+        
+      // Restoring the DB
+        
+        $restore_file  = $result;  
+        
+        $cmd = "mysql -h {$params['db_host']} -u {$params['db_uname']} -p{$params['db_password']} {$params['db_to_backup']} < $restore_file";
+        
+        exec($cmd);
+        
+    }
+
+
+    fclose($fp);
+
+
 ?>
-
-<!-- Complete Database Backup -->
-
-   <?php
-   $dbhost = 'mysql1.cs.clemson.edu';
-   $dbuser = 'Moneka';
-   $dbpass = 'moneka123';
-   
-   $conn = mysql_connect($dbhost, $dbuser, $dbpass);
-   
-   if(! $conn ) {
-      die('Could not connect: ' . mysql_error());
-   }
-
-   $backup_file = $dbname . date("Y-m-d-H-i-s") . '.gz';
-   $command = "mysqldump --opt -h $dbhost -u $dbuser -p $dbpass ". "test_db | gzip > $backup_file";
-   
-   system($command);
-?>
-
-<!--
