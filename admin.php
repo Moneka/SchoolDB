@@ -16,6 +16,16 @@ include_once 'headerlogin.php';
       </div>
     </div>
 	
+<div class= "container text-center">
+
+<a href="backup.php" class="btn btn-info btn-lg">    
+                    <span class="glyphicon glyphicon-heart"></span> BACK UP THE DATABASE!!</a>
+    
+ 
+
+</div>
+
+   
 	
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
 <div id = "profile" class="container-fluid text-center">
@@ -145,7 +155,7 @@ if(isset($_POST['edit'])){
                     <span class="glyphicon glyphicon-heart"></span> What's Happening?!</a>
     
 </div>
-
+ 
   
     <footer class="container-fluid text-center">
   <a href="#myPage" title= "To Top">
