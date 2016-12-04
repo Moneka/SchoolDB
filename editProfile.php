@@ -55,7 +55,7 @@ if(isset($_POST['save']))
       <div class="form-group">
       <label class="control-label col-sm-2" for="mname">Middle Name</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id = "mname" name="mname" placeholder="Enter middle name" required>
+        <input type="text" class="form-control" id = "mname" name="mname" placeholder="Enter middle name" >
       </div>
     </div>
       
@@ -96,7 +96,7 @@ if(isset($_POST['save']))
 	<div class="form-group">
       <label class="control-label col-sm-2" for="street">Street 2</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id="street2" name="street2" placeholder="Enter Street" required>
+        <input type="text" class="form-control" id="street2" name="street2" placeholder="Enter Street" >
       </div>
     </div>
       
