@@ -60,7 +60,9 @@ directory.php --> Viewing the Directory which contains every school member's ema
 Functions:  directory()
 
 library.php --> Viewing all the E-books available and able to download them.
+
 notice.php -->  Static Page viewing the notice board.
+
 logout.php -->  Logging out of the user's session.
 
 Teacher
@@ -78,7 +80,9 @@ directory.php --> Viewing the Directory which contains every school member's ema
 Functions:  directory()
 
 library.php --> Viewing all the E-books available and able to download them.
+
 notice.php -->  Static Page viewing the notice board.
+
 logout.php -->  Logging out of the user's session.
 
 Student
@@ -96,7 +100,9 @@ directory.php --> Viewing the Directory which contains every school member's ema
 Functions:  directory()
 
 library.php --> Viewing all the E-books available and able to download them.
+
 notice.php -->  Static Page viewing the notice board.
+
 logout.php -->  Logging out of the user's session.
 
 Staff
@@ -111,7 +117,9 @@ directory.php --> Viewing the Directory which contains every school member's ema
 Functions:  directory()
 
 library.php --> Viewing all the E-books available and able to download them.
+
 notice.php -->  Static Page viewing the notice board.
+
 logout.php -->  Logging out of the user's session.
 
 
