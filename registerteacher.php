@@ -6,19 +6,12 @@
 	include_once 'function.php';
 	if(isset($_POST['submit']))
     {
-              
+     
+        
         $addinfo = addteacherinfo($_POST['dept'],  $_POST['notes'], $_POST['role'],$conn);
 		
-		$valid = validateDept($_POST['dept'],$conn);
 		
-		if($valid == false)
-		{	
-				$message = "Deptarment doesnot exist!";
-				echo "<script type='text/javascript'>alert('$message');</script>";
-         
-        }
-		
-        else{
+        
 			if($addinfo)
 			{
 				$message = "Info added!";
@@ -36,7 +29,7 @@
 		}
 		
 	
-	}
+	
 	
 ?>
 
