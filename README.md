@@ -1,5 +1,8 @@
 # SchoolDB
 
+Files included
+-----------------------------------------------------------------------------------------------------------------
+README, sql dump file (SchoolDB.sql), the backed up sql dump file ("sql-backup-04-12-2016--04-58-02,sql"), PHP Files and img folder(Contains the images used).
 
 Flow of the Code: 
 -------------------------------------------------------------------------------------------------------------
