@@ -14,7 +14,7 @@
 		
 		
 		if($check){
-			echo "If";
+			
 			$message = "Course Updated!!";
 			echo "<script type='text/javascript'>alert('$message');</script>";
 		}
